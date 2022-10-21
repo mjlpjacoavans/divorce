@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Question page - HumanCenteredAi</title>
+    <meta property="og:title" content="Question-page - HumanCenteredAi" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div>
+      <link href="../static/css/question-page.css" rel="stylesheet" />
+
+      <div class="question-page-container">
+        <div class="question-page-breadcrubs">
+          <h1 class="question-page-text">
+            <span>Question {{question_id + 1}} / {{len(all_questions)}}</span>
+            <br />
+          </h1>
+        </div>
+        <form action="" type="GET">
+          <div class="question-page-question-container twotimes">
+            <h1 class="question-page-text03">
+              <span>Question {{question_id + 1}}</span>
+              <br />
+            </h1>
+            <span class="question-page-text06">
+              <span>{{question}}</span>
+              <br />
+              <br />
+            </span>
+            <div class="question-page-slider-box-container">
+              <input
+                name="slider_input"
+                type="range"
+                id="slider"
+                max="5"
+                min="0"
+                value="4"
+                placeholder="placeholder"
+                class="question-page-textinput range input"
+              />
+              <input
+                  name="question_id"
+                  value="{{question_id + 1}}"
+                  type="hidden"
+                  />
+              <input
+                name="session_id"
+                value="{{session_id}}"
+                type="hidden"
+                />
+              <div class="question-page-slider-text-container">
+                <span id="slider-text" class="question-page-slider-text">
+                  Loading...
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="question-page-button-container">
+            <button class="question-page-button button">Next &#129094;  </button>
+          </div>
+        </form>
+<!--        <span id="session_id_div" class="question-page-user-id-text">{{session_id or "Session id unknown ⚠️"}}</span>-->
+        <span id="session_id_div" class="question-page-user-id-text">{{session_id}}👤 </span>
+
+        </div>
+    </div>
+    <script>
+          let slider = document.getElementById("slider")
+          let sliderText = document.getElementById("slider-text")
+
+          window.onload = () => {
+            sliderText.textContent = slider.value;
+          }
+
+          slider.addEventListener("mousemove", (e)=>{
+              console.log(slider.value)
+              sliderText.textContent = slider.value;
+          })
+    </script>
+  </body>
+</html>
