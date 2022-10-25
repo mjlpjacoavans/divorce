@@ -1,4 +1,5 @@
 # Webapp imports
+import os
 import random
 import string
 import threading
@@ -24,24 +25,20 @@ import keras
 app = Flask(__name__)
 classifier, accuracy = None, None
 admin_password = "admin"
-tree_seed = 46841
+seed = 46841
 
-# all_questions = [
-# 	"My spouse and I have similar ideas about how roles should be in marriage",
-# 	"I enjoy traveling with my wife.",
-# 	"The time I spent with my wife is special for us.",
-# 	"I know my spouse's basic anxieties.",
-# 	"My discussion with my spouse is not calm.",
-# 	"I know my spouse's favorite food.",
-# 	"I know my spouse's friends and their social relationships.",
-# 	"I know what my spouse's current sources of stress are.",
-#
-#
-# 	# "Even if I'm right in the discussion, I stay silent to hurt my spouse."
-# ]
+all_questions = [
+	"My spouse and I have similar ideas about how roles should be in marriage",
+	"I enjoy traveling with my wife.",
+	"The time I spent with my wife is special for us.",
+	"I know my spouse's basic anxieties.",
+	"My discussion with my spouse is not calm.",
+	"I know my spouse's favorite food.",
+	"I know my spouse's friends and their social relationships.",
+	"I know what my spouse's current sources of stress are.",
+]
 
-
-
+"""
 all_questions = [
 	"We're just starting a discussion before I know what's going on.",
 	'We share the same views about being happy in our life with my spouse',
@@ -99,6 +96,7 @@ all_questions = [
 	"We don't have time at home as partners."
 	
 ][:10]
+"""
 
 
 def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
@@ -120,8 +118,8 @@ df, X_train, X_test, y_train, y_test = prepare_dataset(
 
 
 def train_tree():
-	print(f"[*] Creating descision tree with seed: {tree_seed}")
-	dtree = DecisionTreeClassifier(random_state=tree_seed, max_depth=5)
+	print(f"[*] Creating descision tree with seed: {seed}")
+	dtree = DecisionTreeClassifier(random_state=seed, max_depth=5)
 	_tree_hist = dtree.fit(X_train, y_train)
 	pred = dtree.predict(X_test)
 	accuracy = metrics.accuracy_score(y_test, pred)
@@ -130,13 +128,23 @@ def train_tree():
 
 
 def train_nn():
-	# TODO: This doesn't work. Ensure seed in an other way.
-	tensorflow.random.set_seed(tree_seed)
-	input_shape = (len(X_train.columns),)
+	def set_tensorflow_seed(seed):
+		tensorflow.experimental.numpy.random.seed(seed)
+		tensorflow.random.set_seed(seed)
+		numpy.random.seed(seed)
+		random.seed(seed)
+		os.environ["PYTHONHASHSEED"] = str(seed)
+		os.environ["TF_CUDNN_DETERMINISTIC"] = "1"
+		os.environ["TF_DETERMINISTIC_OPS"] = "1"
 
+	set_tensorflow_seed(seed)
+
+	print(f"[*] Random: {''.join([str(list(tensorflow.random.normal((1, 1)).numpy()[0])[0])[-1] for x in range(10)])}")
+
+	input_shape = (len(X_train.columns),)
 	model = keras.Sequential()
 	model.add(Dense(8, input_shape=input_shape, activation="relu"))
-	# model.add(Dense(6, input_shape=input_shape, activation="relu"))
+	model.add(Dense(6, input_shape=input_shape, activation="relu"))
 	model.add(Dense(2, activation="softmax"))
 
 	model.compile(optimizer=Adam(learning_rate=0.001),
@@ -154,7 +162,6 @@ def train_nn():
 
 
 classifier, accuracy = train_nn()
-
 
 
 @app.get("/onboarding")
@@ -178,10 +185,8 @@ def result_get():
 
 	X_questions = [list(question_params.values())]
 
-
-	y_proba  = classifier.predict(X_questions)
+	y_proba = classifier.predict(X_questions)
 	_class = numpy.argmax(y_proba, axis=-1)
-
 
 	divorce_prob = y_proba[0][0]
 	print(f"[*] Did a predictionfor X of {X_questions=}: {y_proba=}|{divorce_prob=}")
