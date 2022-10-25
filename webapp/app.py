@@ -128,13 +128,9 @@ def train_tree():
 	return dtree, accuracy
 
 
-def train_nn(save_model_path="./models/latest.pt"):
+def train_nn(save_model_path=".\\models\\default.h5", restore_model_path=".\\models\\default.h5"):
 	print(f"[*] Random: {''.join([str(list(tensorflow.random.normal((1, 1)).numpy()[0])[0])[-1] for x in range(10)])}")
-
-	if os.path.isfile(save_model_path):
-		print(f"[*] Restored network: {save_model_path}")
-		model = keras.models.load_model(save_model_path)
-	else:
+	if not os.path.isfile(save_model_path) or overwrite_model:
 		input_shape = (len(X_train.columns),)
 		model = keras.Sequential()
 		model.add(Dense(8, input_shape=input_shape, activation="relu"))
@@ -150,7 +146,10 @@ def train_nn(save_model_path="./models/latest.pt"):
 		                    validation_data=(X_test, y_test),
 		                    epochs=200, verbose=0, batch_size=128)
 
-		model.save_weights(save_model_path)
+		model.save(save_model_path)
+	else:
+		print(f"[*] Restored network: {restore_model_path}")
+		model = keras.models.load_model(restore_model_path)
 
 	loss, accuracy = model.evaluate(
 		X_test, y_test, verbose=0)
