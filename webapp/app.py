@@ -26,6 +26,7 @@ app = Flask(__name__)
 classifier, accuracy = None, None
 admin_password = "admin"
 seed = 46841
+overwrite_model = False
 
 all_questions = [
 	"My spouse and I have similar ideas about how roles should be in marriage",
@@ -127,24 +128,29 @@ def train_tree():
 	return dtree, accuracy
 
 
-def train_nn():
-
+def train_nn(save_model_path="./models/latest.pt"):
 	print(f"[*] Random: {''.join([str(list(tensorflow.random.normal((1, 1)).numpy()[0])[0])[-1] for x in range(10)])}")
 
-	input_shape = (len(X_train.columns),)
-	model = keras.Sequential()
-	model.add(Dense(8, input_shape=input_shape, activation="relu"))
-	model.add(Dense(6, input_shape=input_shape, activation="relu"))
-	# model.add(Dense(4, input_shape=input_shape, activation="relu"))
-	model.add(Dense(2, activation="softmax"))
+	if os.path.isfile(save_model_path):
+		print(f"[*] Restored network: {save_model_path}")
+		model = keras.models.load_model(save_model_path)
+	else:
+		input_shape = (len(X_train.columns),)
+		model = keras.Sequential()
+		model.add(Dense(8, input_shape=input_shape, activation="relu"))
+		model.add(Dense(6, input_shape=input_shape, activation="relu"))
+		# model.add(Dense(4, input_shape=input_shape, activation="relu"))
+		model.add(Dense(2, activation="softmax"))
 
-	model.compile(optimizer=Adam(learning_rate=0.001),
-	              loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+		model.compile(optimizer=Adam(learning_rate=0.001),
+		              loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
-	print("[*] Started training network")
-	history = model.fit(X_train, y_train,
-	                    validation_data=(X_test, y_test),
-	                    epochs=200, verbose=0, batch_size=128)
+		print("[*] Started training network")
+		history = model.fit(X_train, y_train,
+		                    validation_data=(X_test, y_test),
+		                    epochs=200, verbose=0, batch_size=128)
+
+		model.save_weights(save_model_path)
 
 	loss, accuracy = model.evaluate(
 		X_test, y_test, verbose=0)
