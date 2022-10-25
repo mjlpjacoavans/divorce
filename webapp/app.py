@@ -136,8 +136,8 @@ def train_nn():
 
 	model = keras.Sequential()
 	model.add(Dense(8, input_shape=input_shape, activation="relu"))
-	model.add(Dense(6, input_shape=input_shape, activation="relu"))
-	model.add(Dense(2, activation="softmax")) # binary_crossentropy
+	# model.add(Dense(6, input_shape=input_shape, activation="relu"))
+	model.add(Dense(2, activation="softmax"))
 
 	model.compile(optimizer=Adam(learning_rate=0.001),
 	              loss="sparse_categorical_crossentropy", metrics=["accuracy"])
@@ -155,10 +155,6 @@ def train_nn():
 
 classifier, accuracy = train_nn()
 
-# @app.before_first_request
-# def startup():
-# 	global classifier, accuracy
-# 	classifier, accuracy = train_nn()
 
 
 @app.get("/onboarding")
@@ -186,27 +182,7 @@ def result_get():
 	y_proba  = classifier.predict(X_questions)
 	_class = numpy.argmax(y_proba, axis=-1)
 
-	print("-------------------")
-	# p1 = (classifier.predict(X_questions) > 0.5).astype("int32")
-	# print(p1)
-	# p2  =
-	# print(p2)
-	# p3 = np.round(y_proba).astype(int)
-	# print(p3)
-	# y_classes = keras.np_utils.probas_to_classes(y_proba)
-	# print(f"{y_classes=}")
 
-
-
-
-
-
-	# pred, prob = classifier.predict(X_questions)
-
-	# pred=40
-	# prob=650
-
-	# divorce_prob = prob if pred else 100 - prob * 100
 	divorce_prob = y_proba[0][0]
 	print(f"[*] Did a predictionfor X of {X_questions=}: {y_proba=}|{divorce_prob=}")
 
