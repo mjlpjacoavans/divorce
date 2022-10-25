@@ -1,8 +1,9 @@
 import random
 import string
+import time
+import re
 
 from flask import Flask, render_template, request, redirect
-
 
 app = Flask(__name__)
 admin_password = "admin"
@@ -29,7 +30,7 @@ def train():
 			tree = None
 		elif storage == "disk":
 			tree = None
-			# tree.save or somethign
+		# tree.save or somethign
 		else:
 			return "Storage should either be disk or mem", 500
 		return "TODO: Train the tree here and save it to disk|mem", 501
@@ -44,30 +45,34 @@ def question_get():
 	_session_id_code = "".join(
 		random.choice(string.ascii_uppercase + string.digits) for _ in range(16))
 	session_id = request.args.get("session_id", type=str, default=_session_id_code)
-	if question_id >= len(all_questions):
-		return "You're finished. Your result is: " + session_id
 
-	question = all_questions[question_id]
 	print(f"New req: {question_id}")
 	return render_template("question-page.html",
-	                       question=question,
-	                       question_id=question_id,
 	                       all_questions=all_questions,
 	                       session_id=session_id,
-	                       len=len)
+	                       **{fun.__name__: fun for fun in [enumerate, len, time]})
+
 
 @app.get("/onboarding")
 @app.get("/")
 def onboarding_get():
-	return "TODO: Onboarding", 501
+	return render_template("index.html")
+
 
 @app.get("/result")
 def result_get():
-	return "TODO: Show results page", 501
+	question_params = {all_questions[int(arg.replace("question-", ""))]: int(val)
+	                   for arg, val in request.args.items()
+	                   if re.search("^question-\d+$", arg)}
+	print(question_params)
+
+	return render_template("results-page.html", )
+
 
 @app.get("/more_info")
 def more_info_get():
 	return "TODO: Show more info about how the app works", 501
+
 
 if __name__ == "__main__":
 	app.run(debug=True, host="0.0.0.0", port=5000)

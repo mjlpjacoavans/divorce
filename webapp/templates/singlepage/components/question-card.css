@@ -1,0 +1,94 @@
+.question-card-question-card {
+  flex: 0 0 auto;
+  width: 100%;
+  height: 294px;
+  display: flex;
+  z-index: 90;
+  position: relative;
+  max-width: 1320px;
+  margin-top: 18px;
+  align-items: flex-start;
+  padding-top: var(--dl-space-space-sixunits);
+  border-color: var(--dl-color-secondary-400);
+  border-width: 0px;
+  padding-left: var(--dl-space-space-tripleunit);
+  border-radius: var(--dl-radius-radius-radius5);
+  padding-right: var(--dl-space-space-tripleunit);
+  flex-direction: row;
+  padding-bottom: 8px;
+}
+.question-card-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--dl-radius-radius-radius75);
+}
+.question-card-container {
+  flex: 2;
+  display: flex;
+  align-items: flex-start;
+  margin-left: var(--dl-space-space-sixunits);
+  margin-right: var(--dl-space-space-sixunits);
+  flex-direction: column;
+}
+.question-card-question-number-text {
+  display: flex;
+  position: relative;
+}
+.question-card-text {
+  color: var(--dl-color-secondary-700);
+  font-size: 1.5rem;
+  font-style: normal;
+  margin-bottom: var(--dl-space-space-halfunit);
+}
+.question-card-question-text {
+  color: #18191b;
+}
+.question-card-slider-container {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-self: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.question-card-textinput {
+  width: 100%;
+  height: 36px;
+  align-self: center;
+}
+.question-card-container1 {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.question-card-icon {
+  fill: #67748e;
+  width: 24px;
+  height: 24px;
+  margin-right: 13px;
+}
+@media(max-width: 991px) {
+  .question-card-container {
+    margin-left: var(--dl-space-space-tripleunit);
+    margin-right: var(--dl-space-space-tripleunit);
+  }
+}
+@media(max-width: 767px) {
+  .question-card-question-card {
+    padding-top: var(--dl-space-space-fourunits);
+    padding-left: var(--dl-space-space-doubleunit);
+    padding-right: var(--dl-space-space-doubleunit);
+    flex-direction: column;
+    padding-bottom: var(--dl-space-space-fourunits);
+  }
+  .question-card-container {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .question-card-text {
+    margin-top: var(--dl-space-space-unit);
+  }
+}
