@@ -50,7 +50,7 @@
           <nav class="header-nav">
             <div class="header-container">
               <div class="header-container1">
-                <a href="index.html" class="header-navlink">
+                <a href="/" class="header-navlink">
                   <span>❤️</span>
                   <span class="large">NoLoveBot</span>
                   <br class="large" />
@@ -61,7 +61,7 @@
                 </span>
               </div>
               <div class="header-menu">
-                <a href="index.html" class="header-navlink1 large">Home</a>
+                <a href="/" class="header-navlink1 large">Home</a>
                 <a href="profile.html" class="header-navlink2 large">Profile</a>
                 <a href="coming-soon.html" class="header-navlink3 large">
                   Coming Soon
@@ -87,7 +87,7 @@
           </nav>
           <div data-type="MobileMenu" class="header-mobile-menu">
             <div class="header-top">
-              <a href="index.html" class="header-navlink4 large">
+              <a href="/" class="header-navlink4 large">
                 Soft UI Design System
               </a>
               <div data-type="CloseMobileMenu" class="header-close-menu">
@@ -208,7 +208,7 @@
                   <div class="question-card-question-card">
                     <img
                       alt="image"
-                      src="https://source.unsplash.com/500x500/?divorce,separation,breakup,divorced &sig={{index}}"
+                      src="https://source.unsplash.com/500x500/?divorce,separation,divorced &sig={{index}}"
                       class="question-card-image"
                     />
                     <div class="question-card-container">
@@ -261,7 +261,7 @@
                             </div>
                         </span>
                       </div>
-                      <span><span>Question {{index}}/{{len(all_questions)}}</span></span>
+                      <span><span>Question {{index+1}}/{{len(all_questions)}}</span></span>
                     </div>
                   </div>
               {% endfor %}
