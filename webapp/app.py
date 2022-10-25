@@ -1,12 +1,23 @@
+# Webapp imports
 import random
 import string
+import threading
 import time
 import re
 
 from flask import Flask, render_template, request, redirect
 
+# Tree imports
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import metrics
+from random import randint
+
 app = Flask(__name__)
+tree, accuracy = None, None
 admin_password = "admin"
+tree_seed = 46841
 
 all_questions = [
 	"My spouse and I have similar ideas about how roles should be in marriage",
@@ -20,22 +31,44 @@ all_questions = [
 ]
 
 
-@app.get("/train")
-def train():
-	# Probably very insecure auth, but no problem for this small scale project.
-	password = request.args.get("password", default="", type=str)
-	storage = request.args.get("storage", default="mem", type=str)
-	if password == admin_password:
-		if storage == "mem":
-			tree = None
-		elif storage == "disk":
-			tree = None
-		# tree.save or somethign
-		else:
-			return "Storage should either be disk or mem", 500
-		return "TODO: Train the tree here and save it to disk|mem", 501
-	else:
-		return "Unauthenticated", 401
+def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
+                    description_file="./dataset/refercence.tsv"):
+	headers_frame = pd.read_csv(description_file, sep="|")
+	headers = list(headers_frame["description"])
+	headers.append("Class")
+	df = pd.read_excel(dataset_file, names=headers)
+
+	X, y = df[all_questions], df["Class"]
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+	return df, X_train, X_test, y_train, y_test
+
+
+def train_tree():
+	print("[*] Preparing dataset")
+	df, X_train, X_test, y_train, y_test = prepare_dataset(
+		".\\dataset\\divorce.xlsx", ".\\dataset\\reference.tsv")
+
+	print(f"[*] Creating descision tree with seed: {tree_seed}")
+	dtree = DecisionTreeClassifier(random_state=tree_seed, max_depth=5)
+	_tree_hist = dtree.fit(X_train, y_train)
+	pred = dtree.predict(X_test)
+	accuracy = metrics.accuracy_score(y_test, pred)
+	print(f"[*] Finished training tree, got accuracy of: {accuracy}%")
+
+	return dtree, accuracy
+
+
+@app.before_first_request
+def activate_job():
+	global tree, accuracy
+	tree, accuracy = train_tree()
+
+
+@app.get("/onboarding")
+@app.get("/")
+def onboarding_get():
+	return render_template("index.html")
 
 
 @app.get("/question")
@@ -53,20 +86,15 @@ def question_get():
 	                       **{fun.__name__: fun for fun in [enumerate, len, time]})
 
 
-@app.get("/onboarding")
-@app.get("/")
-def onboarding_get():
-	return render_template("index.html")
-
-
 @app.get("/result")
 def result_get():
 	question_params = {all_questions[int(arg.replace("question-", ""))]: int(val)
 	                   for arg, val in request.args.items()
 	                   if re.search("^question-\d+$", arg)}
-	print(question_params)
 
-	return render_template("results-page.html", )
+	X_questions = [list(question_params.values())]
+	pred, prob = tree.predict_proba(X_questions)[0]
+	return render_template("results-page.html", pred=pred, prob=prob)
 
 
 @app.get("/more_info")

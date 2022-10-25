@@ -70,7 +70,7 @@
               <div class="header-container2">
                 <div class="header-container3">
                   <div class="header-container4">
-                    <button class="header-button button buttonSmall">
+                    <button onclick=questionsForm.submit() class="header-button button buttonSmall">
                       <span>Submit answers</span>
                     </button>
                   </div>
@@ -203,91 +203,73 @@
             Quisque vitae ex arcu.
           </span>
           <div class="question-page-questions-container">
-            <form class="question-page-form" type="GET" action="/result" >
-
-
-
-
-<!--              -->
-
+            <form id="questionsForm" class="question-page-form" type="GET" action="/result" >
               {% for index,question in enumerate(all_questions) %}
-              <div class="question-card-question-card">
-                <img
-                  alt="image"
-                  src="https://source.unsplash.com/500x500/?divorce,separation,breakup,divorced &sig={{index}}"
-                  class="question-card-image"
-                />
-                <div class="question-card-container">
-                  <div class="question-card-question-number-text">
-                    <h1 class="question-card-text">
-                      <span>Question {{index+1}}</span>
-                      <br />
-                    </h1>
-                  </div>
-                  <span class="question-card-question-text">
-                    <span>{{question}}</span>
-                  </span>
-                  <div class="question-card-slider-container" id="question-{{index}}-input">
-                    <input
-                      type="range"
-                      id="slider"
-                      max="5"
-                      min="0"
-                      value="3"
-                      name="question-{{index}}"
-                      placeholder="placeholder"
-                      class="question-card-textinput input"
+                  <div class="question-card-question-card">
+                    <img
+                      alt="image"
+                      src="https://source.unsplash.com/500x500/?divorce,separation,breakup,divorced &sig={{index}}"
+                      class="question-card-image"
                     />
-                    <div class="question-value-number">Loading...</div>
-                  </div>
-                  <div class="question-card-container1">
-                    <svg viewBox="0 0 1024 1024" class="question-card-icon">
-                      <path
-                        d="M470 384v-86h84v86h-84zM512 854q140 0 241-101t101-241-101-241-241-101-241 101-101 241 101 241 241 101zM512 86q176 0 301 125t125 301-125 301-301 125-301-125-125-301 125-301 301-125zM470 726v-256h84v256h-84z"
-                      ></path>
-                    </svg>
-
-
-
-
-                    <span>
-                        <div class="tooltip">
-                          What do these numbers mean?
-                          <div class="right">
-                              <div class="text-content">
-                                  <h3>Scale</h3>
-                                  <ul>
-                                      <div>The scale of the numbers is as follows:</div>
-                                      <br/>
-                                      <li>Never: 0</li>
-                                      <li>Seldom: 1</li>
-                                      <li>Averagely: 2</li>
-                                      <li>Frequently: 3</li>
-                                      <li>Always:4</li>
-                                  </ul>
+                    <div class="question-card-container">
+                      <div class="question-card-question-number-text">
+                        <h1 class="question-card-text">
+                          <span>Question {{index+1}}</span>
+                          <br />
+                        </h1>
+                      </div>
+                      <span class="question-card-question-text">
+                        <span>{{question}}</span>
+                      </span>
+                      <div class="question-card-slider-container" id="question-{{index}}-input">
+                        <input
+                          type="range"
+                          id="slider"
+                          max="5"
+                          min="0"
+                          value="3"
+                          name="question-{{index}}"
+                          placeholder="placeholder"
+                          class="question-card-textinput input"
+                        />
+                        <div class="question-value-number">Loading...</div>
+                      </div>
+                      <div class="question-card-container1">
+                        <svg viewBox="0 0 1024 1024" class="question-card-icon">
+                          <path
+                            d="M470 384v-86h84v86h-84zM512 854q140 0 241-101t101-241-101-241-241-101-241 101-101 241 101 241 241 101zM512 86q176 0 301 125t125 301-125 301-301 125-301-125-125-301 125-301 301-125zM470 726v-256h84v256h-84z"
+                          ></path>
+                        </svg>
+                        <span>
+                            <div class="tooltip">
+                              What do these numbers mean?
+                              <div class="right">
+                                  <div class="text-content">
+                                      <h3>Scale</h3>
+                                      <ul>
+                                          <div>The scale of the numbers is as follows:</div>
+                                          <br/>
+                                          <li>Never: 0</li>
+                                          <li>Seldom: 1</li>
+                                          <li>Averagely: 2</li>
+                                          <li>Frequently: 3</li>
+                                          <li>Always:4</li>
+                                      </ul>
+                                  </div>
+                                  <i></i>
                               </div>
-                              <i></i>
-                          </div>
-                        </div>
-                    </span>
-
-
-
-
-
-
-
+                            </div>
+                        </span>
+                      </div>
+                      <span><span>Question {{index}}/{{len(all_questions)}}</span></span>
+                    </div>
                   </div>
-                  <span><span>Question {{index}}/{{len(all_questions)}}</span></span>
-                </div>
-              </div>
               {% endfor %}
-<!--              -->
 
 
               <div class="question-page-container4">
                 <div class="question-page-container5">
-                  <button type="submit" onclick="alert" class="question-page-button button buttonSmall">
+                  <button type="submit" class="question-page-button button buttonSmall">
                     <span>Submit answers</span>
                     <svg viewBox="0 0 1024 1024" class="question-page-icon6">
                       <path
