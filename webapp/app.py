@@ -128,16 +128,6 @@ def train_tree():
 
 
 def train_nn():
-	def set_tensorflow_seed(seed):
-		tensorflow.experimental.numpy.random.seed(seed)
-		tensorflow.random.set_seed(seed)
-		numpy.random.seed(seed)
-		random.seed(seed)
-		os.environ["PYTHONHASHSEED"] = str(seed)
-		os.environ["TF_CUDNN_DETERMINISTIC"] = "1"
-		os.environ["TF_DETERMINISTIC_OPS"] = "1"
-
-	set_tensorflow_seed(seed)
 
 	print(f"[*] Random: {''.join([str(list(tensorflow.random.normal((1, 1)).numpy()[0])[0])[-1] for x in range(10)])}")
 
@@ -145,6 +135,7 @@ def train_nn():
 	model = keras.Sequential()
 	model.add(Dense(8, input_shape=input_shape, activation="relu"))
 	model.add(Dense(6, input_shape=input_shape, activation="relu"))
+	# model.add(Dense(4, input_shape=input_shape, activation="relu"))
 	model.add(Dense(2, activation="softmax"))
 
 	model.compile(optimizer=Adam(learning_rate=0.001),
