@@ -185,9 +185,124 @@ def result_get():
 	_class = numpy.argmax(y_proba, axis=-1)
 
 	divorce_prob = y_proba[0][0]
-	print(f"[*] Did a predictionfor X of {X_questions=}: {y_proba=}|{divorce_prob=}")
+	print(f"[*] Did a prediction for X of {X_questions=}: {y_proba=}|{divorce_prob=}")
 
-	return render_template("results-page.html", divorce_prob=divorce_prob,
+	if divorce_prob < .33:
+		chance = "low"
+		percentage_color = "green"
+		improvement_text = "You have a " + chance + " chance of getting a divorce. But this does not mean "
+
+		tips_title = "Here are some tips to make your marriage even better!"
+		tips_tagline = "Although your chances to get a divorce are quite low, there's awlays room " \
+		               "for improvement. Here are some tips to make your marriage even better. "
+		tips = [
+			[
+				"Have fun together",
+				"""Having fun together is what makes relationships great. 
+				Always make sure to have fun together. Make time to do things together, 
+				go out to eat, and just enjoy each other's company."""
+			],
+			[
+				"Give compliments",
+				"""
+				Complimenting someone is a great way to show them 
+				how much you care about them. Complimenting someone 
+				shows them that you notice their positive traits and 
+				appreciate them.
+				"""
+			],
+			[
+				"Listen",
+				"""
+				Listening is a skill that everyone should learn. 
+				Listening helps you understand what someone else is 
+				saying. It helps you connect with them and build trust 
+				between you. So if you want a good relationship, listen!
+				"""
+			]
+		]
+
+	elif divorce_prob > .33 and divorce_prob < .66:
+		chance = "medium"
+		percentage_color = "orange"
+		tips_title = "Here are some tips to improve your mariage."
+		tips_tagline = ""
+		tips = [
+			[
+				"Respect each other's space",
+				"""Respecting each others' personal space is something
+				   that should always be done. You should never invade someone else's personal 
+				   space without their permission. When you respect 
+				   each other's space, you're showing them that they
+				  matter to you."""
+			],
+			[
+				"Be honest about what you want",
+				"""The first step to preventing a divorce is being 
+					honest about what you want. If you don't know what you want, 
+					then how do you expect someone else to know? You need to have 
+					a clear idea of what you want out of a relationship before you 
+					enter into one. Don't get married just because everyone else does. 
+					Make sure you're ready to commit to each other."""
+			],
+			[
+				"Keep communication open",
+				"""
+				Communication is key to any relationship. 
+				Whether it's with family members, friends, 
+				or even lovers, keeping communication open 
+				is always a good idea. When you talk to each other, 
+				you get to know what makes them tick. 
+				And when you know what makes them tick, 
+				you can help them feel comfortable around you.
+				"""
+			]
+		]
+	elif divorce_prob > .66:
+		chance = "high"
+		percentage_color = "red"
+		tips_title = "Here are some tips to work on your mariage"
+		tips_tagline = "The results of our analysis on your data indicate that your have a high chance" \
+		               "to get divorced. Bellow are some tips to imrpove your relationship. In adition to that we" \
+		               "would highly recommend to contact a relationship professional."
+		tips = [
+			[
+				"Communication",
+				"""Communication is the first step to any relationship. 
+				If you want to keep things going, communication is key. 
+				You should always make sure to communicate openly and honestly 
+				about what's going on in your lives."""
+			],
+			[
+				"Accept responsibility",
+				"""
+				A lot of people blame others for problems in 
+				relationships, but the real problem lies with 
+				the individual. You have to accept responsibility 
+				for your actions. If you're constantly blaming others, 
+				then you're going to keep having problems.
+				"""
+
+			],
+			[
+				"Respect each other",
+				"""
+				Respect is something that comes naturally 
+				between two people who love each other. 
+				When you respect someone, you show them that 
+				you care about them and value their opinion. 
+				Showing someone you respect them makes them 
+				feel good about themselves.
+				"""
+			]
+		]
+
+	return render_template("results-page.html",
+	                       percentage_color=percentage_color,
+	                       divorce_prob=divorce_prob,
+	                       tips_tagline=tips_tagline,
+	                       tips_title=tips_title,
+	                       tips=tips,
 	                       **{fun.__name__: fun for fun in [round]})
 
 
@@ -197,4 +312,4 @@ def more_info_get():
 
 
 if __name__ == "__main__":
-	app.run(debug=0, host="0.0.0.0", port=5000)
+	app.run(debug=1, host="0.0.0.0", port=5000)

@@ -51,7 +51,7 @@
               <div class="header-container1">
                 <a href="/" class="header-navlink">
                   <span>❤️</span>
-                  <span class="large">NoLoveBot</span>
+                  <span class="large">Relation ship health</span>
                   <br class="large" />
                 </a>
                 <span class="header-text3">
@@ -71,7 +71,7 @@
                   <div class="header-container4">
                     <button class="header-button button buttonSmall">
                       <span>
-                        <a href="/question"><a href="/question">Resubmit</a>
+                        <a href="/question"><a href="/question">Submit again</a>
                       </span>
                     </button>
                   </div>
@@ -126,28 +126,33 @@
                     <span>you have a</span>
                     <br />
                   </h1>
-                  <h1 class="results-page-chance-percentage">{{round(divorce_prob*100,1)}}%</h1>
+                  <h1 class="results-page-chance-percentage"
+                      style="color:{{percentage_color}}"
+                        ><span class="countup">{{round(divorce_prob*100,1)}}</span>%
+                  </h1>
                   <h1 class="results-page-text03">
                     <span>chance of getting</span>
                     <br />
-                    <span>a divorce</span>
+                    <span>a <b>divorce</b></span>
                     <br />
                   </h1>
                 </div>
                 <h2 class="results-page-text08">
-                  <span>What does this mean</span>
+                  <span>What does this mean?</span>
                   <br />
                 </h2>
                 <span class="results-page-text11">
                   <span>
-                    Some explaination on how the model works and etc etc etc
-                    etc.
+                    TODO: A computer program has compared the answers to your
+                    questions with 200 people who also answered the same questions and
+                    has decided to that you blah blah blah... For more info please click the link bellow.
                   </span>
                   <br />
                 </span>
                 <span class="results-page-text14">SEE MORE</span>
               </div>
             </div>
+
             <div class="results-page-card-container1">
               <div class="results-page-feature-card1">
                 <svg viewBox="0 0 1024 1024" class="results-page-icon">
@@ -218,9 +223,10 @@
         </div>
         <div class="results-page-three-container1">
           <h1 class="results-page-text48">
-            <span>Tips to improve your marriage</span>
+            <span>{{tips_title}}</span>
             <br />
           </h1>
+          <div class="tips-tagline">{{tips_tagline}}</div>
           <div class="results-page-explaination-container1">
             <div class="results-page-card-container4">
               <div class="results-page-feature-card4">
@@ -230,55 +236,47 @@
                   ></path>
                 </svg>
                 <h2 class="results-page-text51">
-                  <span>Anonymous</span>
+                  <span>{{tips[0][0]}}</span>
                   <br />
                 </h2>
                 <span class="results-page-text54">
-                  <span>No data is being stored</span>
-                  <br />
-                  <span>or used to train future</span>
-                  <br />
-                  <span>models.</span>
+                  <span>{{tips[0][1]}}</span>
                 </span>
                 <span class="results-page-text60">SEE MORE</span>
               </div>
             </div>
-            <div class="results-page-card-container5">
-              <div class="results-page-feature-card5">
-                <svg viewBox="0 0 1024 1024" class="results-page-icon08">
+            <div class="results-page-card-container4">
+              <div class="results-page-feature-card4">
+                <svg viewBox="0 0 1024 1024" class="results-page-icon06">
                   <path
                     d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
                   ></path>
                 </svg>
-                <h2 class="results-page-text61">Confidencial</h2>
-                <span class="results-page-text62">
-                  <span>No data is being stored</span>
+                <h2 class="results-page-text51">
+                  <span>{{tips[1][0]}}</span>
                   <br />
-                  <span>and can not be viewed by</span>
-                  <br />
-                  <span>any other party but you.</span>
-                  <br />
+                </h2>
+                <span class="results-page-text54">
+                  <span>{{tips[1][1]}}</span>
                 </span>
-                <span class="results-page-text69">SEE MORE</span>
+                <span class="results-page-text60">SEE MORE</span>
               </div>
             </div>
-            <div class="results-page-card-container6">
-              <div class="results-page-feature-card6">
-                <svg viewBox="0 0 1024 1024" class="results-page-icon10">
+            <div class="results-page-card-container4">
+              <div class="results-page-feature-card4">
+                <svg viewBox="0 0 1024 1024" class="results-page-icon06">
                   <path
                     d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
                   ></path>
                 </svg>
-                <h2 class="results-page-text70">Scientific</h2>
-                <span class="results-page-text71">
-                  <span>Dont take this</span>
+                <h2 class="results-page-text51">
+                  <span>{{tips[2][0]}}</span>
                   <br />
-                  <span>result to serious,</span>
-                  <br />
-                  <span>discalimer balh balh</span>
-                  <br />
+                </h2>
+                <span class="results-page-text54">
+                  <span>{{tips[2][1]}}</span>
                 </span>
-                <span class="results-page-text78">SEE MORE</span>
+                <span class="results-page-text60">SEE MORE</span>
               </div>
             </div>
           </div>
@@ -367,7 +365,7 @@
           <div class="footer-container">
             <div class="footer-container1">
               <span class="footer-text">SOFT</span>
-              <span>Copyright © 2021 Soft by Creative Tim.</span>
+              <span>Human centered AI design 2022.</span>
             </div>
             <div class="footer-container2">
               <div class="footer-container3">
@@ -403,6 +401,51 @@
         </footer>
       </div>
     </div>
+    <script>
+      // How long you want the animation to take, in ms
+      const animationDuration = 800;
+      // Calculate how long each ‘frame’ should last if we want to update the animation 60 times per second
+      const frameDuration = 10000 / 60;
+      // Use that to calculate how many frames we need to complete the animation
+      const totalFrames = Math.round( animationDuration / frameDuration );
+      // An ease-out function that slows the count as it progresses
+      const easeOutQuad = t => t * ( 2 - t );
+
+      // The animation function, which takes an Element
+      const animateCountUp = el => {
+          let frame = 0;
+          const countTo = parseInt( el.innerHTML, 10 );
+          // Start the animation running 60 times per second
+          const counter = setInterval( () => {
+              frame++;
+              // Calculate our progress as a value between 0 and 1
+              // Pass that value to our easing function to get our
+              // progress on a curve
+              const progress = easeOutQuad( frame / totalFrames );
+              // Use the progress value to calculate the current count
+              const currentCount = Math.round( countTo * progress );
+
+              // If the current count has changed, update the element
+              if ( parseInt( el.innerHTML, 10 ) !== currentCount ) {
+                  el.innerHTML = currentCount;
+              }
+
+              // If we’ve reached our last frame, stop the animation
+              if ( frame === totalFrames ) {
+                  clearInterval( counter );
+              }
+          }, frameDuration );
+      };
+
+      // Run the animation on all elements with a class of ‘countup’
+      const runAnimations = () => {
+          const countupEls = document.querySelectorAll( '.countup' );
+          countupEls.forEach( animateCountUp );
+      };
+
+      runAnimations();
+
+    </script>
     <script src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
   </body>
 </html>
