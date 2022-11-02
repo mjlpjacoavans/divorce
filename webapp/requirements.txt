@@ -1,3 +1,4 @@
+tensorflow-cpu
 tensorflow
 matplotlib
 openpyxl
