@@ -1,10 +1,12 @@
 # Webapp imports
-import os
 import random
 import string
 import threading
+from pprint import pprint
 import time
 import re
+import os
+
 
 import numpy
 from flask import Flask, render_template, request, redirect
@@ -157,6 +159,9 @@ def train_nn(save_model_path="./models/default.h5", restore_model_path="./models
 	print(f"[*] Finished training net, got accuracy of: {accuracy}%")
 	return model, accuracy
 
+pprint(os.environ)
+print(os.system("pwd"))
+print(os.system("ls"))
 
 classifier, accuracy = train_nn(
 	 os.getenv("SAVE_MODEL_PATH") or ".\\models\\default.h5",
