@@ -275,7 +275,7 @@
 }
 .outline-gray-button-button {
   color: var(--dl-color-secondary-200);
-  outlinr: none;
+  outline: none;
   transition: all .15s ease-in;
   padding-top: var(--dl-space-space-triplequarterunit);
   border-color: var(--dl-color-secondary-200);
