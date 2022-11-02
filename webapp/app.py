@@ -101,11 +101,6 @@ all_questions = [
 ][:10]
 """
 
-pprint(os.environ)
-print("PWD:\n----\n",os.system("pwd"))
-print("LS .:\n----\n",os.system("ls"))
-print("LS ./dataset:\n----\n",os.system(" ls ./dataset"))
-
 
 
 def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
