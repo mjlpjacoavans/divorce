@@ -690,7 +690,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
 }
 .results-page-feature-card1 {
   width: 100%;
@@ -827,7 +827,7 @@
   align-items: center;
   padding-left: 100px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
 }
 .results-page-feature-card4 {
   width: 100%;

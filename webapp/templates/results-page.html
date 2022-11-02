@@ -239,20 +239,105 @@
                   ></path>
                 </svg>
                 <h2 class="results-page-text15">
-                  <span>How did we arive at this result?</span>
+                  <span>Detailed result</span>
                   <br />
                 </h2>
                 <span class="results-page-text18">
-                  <span>No data is being stored</span>
-                  <br />
-                  <span>and can not be viewed by</span>
-                  <br />
-                  <span>any other party but you.</span>
-                  <br />
+                  To get a better insight into how </br>
+                  HC Divorce predictor arrived at your result </br>
+                  please have a look at your personal detailed graph </br>
+                  based on your answers.
                 </span>
-                <span class="results-page-text25">SEE MORE</span>
+                <span class="results-page-text36">
+                  <button class="trigger button buttonSmall">
+                      <span>
+                         View graph
+                      </span>
+                    </button>
+                </span>
               </div>
             </div>
+
+
+
+
+<div class="modal">
+    <div class="modal-content">
+        <span class="close-button">×</span>
+        <img width="600px" height="auto" src="https://raw.githubusercontent.com/slundberg/shap/master/docs/artwork/boston_waterfall.png">
+        <div>
+          Some explaination about how to interpret the graph.
+        </div>
+    </div>
+</div>
+
+<style>
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 50%;
+    border-radius: 0.5rem;
+}
+
+.close-button {
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: lightgray;
+}
+
+.close-button:hover {
+    background-color: darkgray;
+}
+
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+</style>
+<script>
+  const modal = document.querySelector(".modal");
+  const trigger = document.querySelector(".trigger");
+  const closeButton = document.querySelector(".close-button");
+
+  function toggleModal() {
+      modal.classList.toggle("show-modal");
+  }
+
+  function windowOnClick(event) {
+      if (event.target === modal) {
+          toggleModal();
+      }
+  }
+
+  trigger.addEventListener("click", toggleModal);
+  closeButton.addEventListener("click", toggleModal);
+  window.addEventListener("click", windowOnClick);
+</script>
+
+
 
             <div class="results-page-card-container2">
               <div class="results-page-feature-card2">
@@ -262,18 +347,28 @@
                   ></path>
                 </svg>
                 <h2 class="results-page-text26">
-                  <span>Explainder 2</span>
+                  <span>Feedback</span>
                   <br />
                 </h2>
                 <span class="results-page-text29">
-                  <span>Dont take this</span>
-                  <br />
-                  <span>result to serious,</span>
-                  <br />
-                  <span>discalimer balh balh</span>
-                  <br />
+                  <span>Your feedback will help us</br>
+                    to improve HC Divorce predictor and</br>
+                    the prediction results!</br>
+                    For any further questions or</br>
+                    feedback about user privacy data</br>
+                    analysis and the app learning feel</br>
+                    free to reach out via the email link bellow</br>
+                  </span>
                 </span>
-                <span class="results-page-text36">SEE MORE</span>
+                <span class="results-page-text36">
+                  <button class="button buttonSmall">
+                      <span>
+                          <a href="mailto:mjlpjacobusse@avans.nl">
+                            Contact us
+                          </a>
+                      </span>
+                    </button>
+                </span>
               </div>
             </div>
             <!--
