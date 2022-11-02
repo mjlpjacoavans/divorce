@@ -101,6 +101,9 @@ all_questions = [
 ][:10]
 """
 
+pprint(os.environ)
+print(os.system("pwd"))
+print(os.system("ls"))
 
 def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
                     description_file="./dataset/refercence.tsv"):
@@ -158,10 +161,6 @@ def train_nn(save_model_path="./models/default.h5", restore_model_path="./models
 		X_test, y_test, verbose=0)
 	print(f"[*] Finished training net, got accuracy of: {accuracy}%")
 	return model, accuracy
-
-pprint(os.environ)
-print(os.system("pwd"))
-print(os.system("ls"))
 
 classifier, accuracy = train_nn(
 	 os.getenv("SAVE_MODEL_PATH") or ".\\models\\default.h5",
