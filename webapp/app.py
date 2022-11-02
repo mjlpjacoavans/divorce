@@ -115,7 +115,8 @@ def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
 
 
 df, X_train, X_test, y_train, y_test = prepare_dataset(
-	".\\dataset\\divorce.xlsx", ".\\dataset\\reference.tsv")
+	os.getenv("DATASET_FILE") or ".\\dataset\\divorce.xlsx",
+	os.getenv("DESCRIPTION_FILE") or ".\\dataset\\reference.tsv")
 
 
 def train_tree():
@@ -128,7 +129,7 @@ def train_tree():
 	return dtree, accuracy
 
 
-def train_nn(save_model_path=".\\models\\default.h5", restore_model_path=".\\models\\default.h5"):
+def train_nn(save_model_path="./models/default.h5", restore_model_path="./models/default.h5"):
 	print(f"[*] Random: {''.join([str(list(tensorflow.random.normal((1, 1)).numpy()[0])[0])[-1] for x in range(10)])}")
 	if not os.path.isfile(save_model_path) or overwrite_model:
 		input_shape = (len(X_train.columns),)
@@ -157,7 +158,10 @@ def train_nn(save_model_path=".\\models\\default.h5", restore_model_path=".\\mod
 	return model, accuracy
 
 
-classifier, accuracy = train_nn()
+classifier, accuracy = train_nn(
+	 os.getenv("SAVE_MODEL_PATH") or ".\\models\\default.h5",
+	 os.getenv("RESTORE_MODEL_PATH") or ".\\models\\default.h5"
+)
 
 
 @app.get("/onboarding")
