@@ -1,7 +1,9 @@
 tensorflow
+matplotlib
 openpyxl
 sklearn
 pandas
+numpy
 keras
 flask
 shap
