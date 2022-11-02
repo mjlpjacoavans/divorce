@@ -3,3 +3,4 @@ pandas
 keras
 sklearn
 tensorflow
+openpyxl
