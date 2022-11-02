@@ -1,37 +1,35 @@
 # Webapp imports
-import base64
-import io
+from pprint import pprint
+import threading
 import random
 import string
-import threading
-from pprint import pprint
+import base64
+import flask
 import time
 import re
+import io
 import os
 
+# Data imports
+import pandas as pd
+import matplotlib
 import numpy
 import shap
-from flask import Flask, render_template, request, redirect
 
 # Tree imports
-import pandas as pd
-from keras.layers import Dense
-from keras.optimizers import Adam
-from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+
+from keras.optimizers import Adam
+from keras.layers import Dense
 from sklearn import metrics
-from random import randint
 
 # NN imports
 import tensorflow
 import keras
 
-app = Flask(__name__)
-classifier, accuracy = None, None
-admin_password = "admin"
-seed = 46841
-overwrite_model = False
+OVERWRITE_MODEL = False
+app = flask.Flask(__name__)
 
 all_questions = [
 	"My spouse and I have similar ideas about how roles should be in marriage",
@@ -59,7 +57,7 @@ def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
 	return df, X_train, X_test, y_train, y_test
 
 
-def train_tree():
+def train_tree(seed=46841):
 	print(f"[*] Creating descision tree with seed: {seed}")
 	dtree = DecisionTreeClassifier(random_state=seed, max_depth=5)
 	_tree_hist = dtree.fit(X_train, y_train)
@@ -71,7 +69,7 @@ def train_tree():
 
 def train_nn(save_model_path="./models/default.h5", restore_model_path="./models/default.h5"):
 	print(f"[*] Random: {''.join([str(list(tensorflow.random.normal((1, 1)).numpy()[0])[0])[-1] for x in range(10)])}")
-	if not os.path.isfile(save_model_path) or overwrite_model:
+	if not os.path.isfile(save_model_path) or OVERWRITE_MODEL:
 		input_shape = (len(X_train.columns),)
 		model = keras.Sequential()
 		model.add(Dense(8, input_shape=input_shape, activation="relu"))
@@ -101,25 +99,23 @@ def train_nn(save_model_path="./models/default.h5", restore_model_path="./models
 @app.get("/onboarding")
 @app.get("/")
 def onboarding_get():
-	return render_template("index.html")
+	return flask.render_template("index.html")
 
 
 @app.get("/question")
 def question_get():
-	return render_template("question-page.html",
-	                       all_questions=all_questions,
-	                       **{fun.__name__: fun for fun in [enumerate, len, time]})
+	return flask.render_template("question-page.html",
+	                             all_questions=all_questions,
+	                             **{fun.__name__: fun for fun in [enumerate, len, time]})
 
 
 def render_shap_explainer(y_proba, X_questions):
-	plt.ioff()
-	fig = plt.figure()
+	matplotlib.pyplot.ioff()
+	fig = matplotlib.pyplot.figure()
+	fig.legend(["Divorce", "No divorce"])
 
-	df_pred = pd.DataFrame(X_test)
+	df_pred = pd.DataFrame(X_questions)
 	shap_values = explainer.shap_values(df_pred)
-
-	# shap.summary_plot(shap_values, df_pred,
-	# 	feature_names=df_pred.columns, show=None, plot_type="bar", max_display=50)
 
 	shap.summary_plot(shap_values, df_pred, plot_type="bar", show=None,
 	                  feature_names=[f"Q{index}). {question[:35]}..."
@@ -133,7 +129,7 @@ def render_shap_explainer(y_proba, X_questions):
 @app.get("/result")
 def result_get():
 	question_params = {all_questions[int(arg.replace("question-", ""))]: int(val)
-	                   for arg, val in request.args.items()
+	                   for arg, val in flask.request.args.items()
 	                   if re.search("^question-\d+$", arg)}
 
 	X_questions = [list(question_params.values())]
@@ -256,14 +252,14 @@ def result_get():
 			]
 		]
 
-	return render_template("results-page.html",
-	                       percentage_color=percentage_color,
-	                       divorce_prob=divorce_prob,
-	                       tips_tagline=tips_tagline,
-	                       tips_title=tips_title,
-	                       b64_img=b64_img,
-	                       tips=tips,
-	                       **{fun.__name__: fun for fun in [round]})
+	return flask.render_template("results-page.html",
+	                             percentage_color=percentage_color,
+	                             divorce_prob=divorce_prob,
+	                             tips_tagline=tips_tagline,
+	                             tips_title=tips_title,
+	                             b64_img=b64_img,
+	                             tips=tips,
+	                             **{fun.__name__: fun for fun in [round]})
 
 
 @app.get("/more_info")
@@ -281,7 +277,7 @@ if __name__ == "__main__":
 		os.getenv("RESTORE_MODEL_PATH") or ".\\models\\default.h5"
 	)
 
-	summary = shap.kmeans(X_test, 1)
+	summary = shap.kmeans(X_test, 20)
 	explainer = shap.KernelExplainer(classifier.predict, summary)
 
 	app.run(debug=0, host="0.0.0.0", port=os.getenv("PORT") or 5000)
