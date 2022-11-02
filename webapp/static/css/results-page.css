@@ -946,3 +946,9 @@
   align-self: center;
   text-align: center;
 }
+
+.stop-scroll {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}

@@ -244,7 +244,8 @@
                 </h2>
                 <span class="results-page-text18">
                   To get a better insight into how </br>
-                  HC Divorce predictor arrived at your result </br>
+                  HC Divorce predictor arrived at your result  </br>
+                  and to know how to better change your behaviour </br>
                   please have a look at your personal detailed graph </br>
                   based on your answers.
                 </span>
@@ -264,9 +265,11 @@
 <div class="modal">
     <div class="modal-content">
         <span class="close-button">×</span>
-        <img width="600px" height="auto" src="https://raw.githubusercontent.com/slundberg/shap/master/docs/artwork/boston_waterfall.png">
-        <div>
-          Some explaination about how to interpret the graph.
+        <div class="modal-center">
+          <img class="modal-img" width="600px" height="auto" src="data:image/png;base64,{{b64_img}}">
+          <div class="modal-text">
+            Some explaination about how to interpret the graph.
+          </div>
         </div>
     </div>
 </div>
@@ -292,8 +295,17 @@
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 1rem 1.5rem;
-    width: 50%;
+    width: 70%;
     border-radius: 0.5rem;
+    z-index: 9999;
+}
+
+.modal-center{
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 .close-button {
@@ -323,6 +335,7 @@
   const closeButton = document.querySelector(".close-button");
 
   function toggleModal() {
+      document.getElementsByTagName("body")[0].classList.toggle("stop-scroll");
       modal.classList.toggle("show-modal");
   }
 
@@ -461,7 +474,7 @@
           </div>
         </div>
 
-        {#
+        <!--
         <div class="results-page-background-blobs">
           <div
             class="background-item-container background-item-root-class-name"
@@ -536,7 +549,7 @@
             />
           </div>
         </div>
-        #}
+        -->
 
 
 

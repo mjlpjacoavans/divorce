@@ -1,4 +1,6 @@
 # Webapp imports
+import base64
+import io
 import random
 import string
 import threading
@@ -7,14 +9,15 @@ import time
 import re
 import os
 
-
 import numpy
+import shap
 from flask import Flask, render_template, request, redirect
 
 # Tree imports
 import pandas as pd
 from keras.layers import Dense
 from keras.optimizers import Adam
+from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
@@ -41,67 +44,6 @@ all_questions = [
 	"I know what my spouse's current sources of stress are.",
 ]
 
-"""
-all_questions = [
-	"We're just starting a discussion before I know what's going on.",
-	'We share the same views about being happy in our life with my spouse',
-	'My spouse and I have similar ideas about how roles should be in marriage',
-	'My spouse and I have similar ideas about how marriage should be',
-	'I think that one day in the future, when I look back, I see that my spouse and I have been in harmony with each other.',
-	'I enjoy traveling with my wife.',
-	'My spouse and I have similar values in trust.',
-	'Our dreams with my spouse are similar and harmonious.',
-	'Our discussions often occur suddenly.',
-	'When I talk to my spouse about something, my calm suddenly breaks.',
-	'The time I spent with my wife is special for us.',
-	'I know my spouse very well.',
-	'I can be humiliating when we discussions.',
-	"We're compatible with my spouse about what love should be.",
-	"I hate my spouse's way of open a subject.",
-	"I know my spouse's friends and their social relationships.",
-	"I know my spouse's basic anxieties.",
-	"I know what my spouse's current sources of stress are.",
-	'I enjoy our holidays with my wife.',
-	'My spouse and I have similar values in terms of personal freedom.',
-	'I know exactly what my wife likes.',
-	'Most of our goals for people (children, friends, etc.) are the same.',
-	'My discussion with my spouse is not calm.',
-	'I can insult my spouse during our discussions.',
-	"I can use negative statements about my spouse's personality during our discussions.",
-	'If one of us apologizes when our discussion deteriorates, the discussion ends.',
-	"I have knowledge of my spouse's inner world.",
-	"Sometimes I think it's good for me to leave home for a while.",
-	"I know my spouse's hopes and wishes.",
-	'My spouse and I have similar sense of entertainment.',
-	'I can tell you what kind of stress my spouse is facing in her/his life.',
-	"I know my spouse's favorite food.",
-	'I can use offensive expressions during our discussions.',
-	'Most of our goals are common to my spouse.',
-	'When discussing with my spouse, I usually use expressions such as ‘you always’ or ‘you never’ .',
-	'I know how my spouse wants to be taken care of when she/he sick.',
-	'I know we can ignore our differences, even if things get hard sometimes.',
-	'When I discuss with my spouse, to contact him will eventually work.',
-	"I'm not afraid to tell my spouse about her/his incompetence.",
-	'When we need it, we can take our discussions with my spouse from the beginning and correct it.',
-	'I feel aggressive when I argue with my spouse.',
-	"I'm not actually the one who's guilty about what I'm accused of.",
-	"I have nothing to do with what I've been accused of.",
-	"When I argue with my spouse, ı only go out and I don't say a word.",
-	'When I discuss, I remind my spouse of her/his inadequacy.',
-	"I'm not the one who's wrong about problems at home.",
-	'When I discuss with my spouse, I stay silent because I am afraid of not being able to control my anger.',
-	"I wouldn't hesitate to tell my spouse about her/his inadequacy.",
-	'I feel right in our discussions.',
-	'I mostly stay silent to calm the environment a little bit.',
-	"I'd rather stay silent than discuss with my spouse.",
-	'We are like two strangers who share the same environment at home rather than family.',
-	"Even if I'm right in the discussion, I stay silent to hurt my spouse.",
-	"We don't have time at home as partners."
-	
-][:10]
-"""
-
-
 
 def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
                     description_file="./dataset/refercence.tsv"):
@@ -115,11 +57,6 @@ def prepare_dataset(dataset_file="./dataset/divorce.xlsx",
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 	return df, X_train, X_test, y_train, y_test
-
-
-df, X_train, X_test, y_train, y_test = prepare_dataset(
-	os.getenv("DATASET_FILE") or ".\\dataset\\divorce.xlsx",
-	os.getenv("DESCRIPTION_FILE") or ".\\dataset\\reference.tsv")
 
 
 def train_tree():
@@ -160,11 +97,6 @@ def train_nn(save_model_path="./models/default.h5", restore_model_path="./models
 	print(f"[*] Finished training net, got accuracy of: {accuracy}%")
 	return model, accuracy
 
-classifier, accuracy = train_nn(
-	 os.getenv("SAVE_MODEL_PATH") or ".\\models\\default.h5",
-	 os.getenv("RESTORE_MODEL_PATH") or ".\\models\\default.h5"
-)
-
 
 @app.get("/onboarding")
 @app.get("/")
@@ -177,6 +109,25 @@ def question_get():
 	return render_template("question-page.html",
 	                       all_questions=all_questions,
 	                       **{fun.__name__: fun for fun in [enumerate, len, time]})
+
+
+def render_shap_explainer(y_proba, X_questions):
+	plt.ioff()
+	fig = plt.figure()
+
+	df_pred = pd.DataFrame(X_test)
+	shap_values = explainer.shap_values(df_pred)
+
+	# shap.summary_plot(shap_values, df_pred,
+	# 	feature_names=df_pred.columns, show=None, plot_type="bar", max_display=50)
+
+	shap.summary_plot(shap_values, df_pred, plot_type="bar", show=None,
+	                  feature_names=[f"Q{index}). {question[:35]}..."
+	                                 for index, question in enumerate(all_questions, start=1)])
+
+	inmem_file = io.BytesIO()
+	fig.savefig(inmem_file, format="png")
+	return base64.b64encode(inmem_file.getbuffer()).decode("ascii")
 
 
 @app.get("/result")
@@ -192,6 +143,9 @@ def result_get():
 
 	divorce_prob = y_proba[0][0]
 	print(f"[*] Did a prediction for X of {X_questions=}: {y_proba=}|{divorce_prob=}")
+
+	b64_img = render_shap_explainer(y_proba, X_questions)
+	# b64_img = None
 
 	if divorce_prob < .33:
 		chance = "low"
@@ -227,7 +181,6 @@ def result_get():
 				"""
 			]
 		]
-
 	elif divorce_prob > .33 and divorce_prob < .66:
 		chance = "medium"
 		percentage_color = "orange"
@@ -308,6 +261,7 @@ def result_get():
 	                       divorce_prob=divorce_prob,
 	                       tips_tagline=tips_tagline,
 	                       tips_title=tips_title,
+	                       b64_img=b64_img,
 	                       tips=tips,
 	                       **{fun.__name__: fun for fun in [round]})
 
@@ -318,4 +272,16 @@ def more_info_get():
 
 
 if __name__ == "__main__":
-	app.run(debug=1, host="0.0.0.0", port=os.getenv("PORT") or 5000)
+	df, X_train, X_test, y_train, y_test = prepare_dataset(
+		os.getenv("DATASET_FILE") or ".\\dataset\\divorce.xlsx",
+		os.getenv("DESCRIPTION_FILE") or ".\\dataset\\reference.tsv")
+
+	classifier, accuracy = train_nn(
+		os.getenv("SAVE_MODEL_PATH") or ".\\models\\default.h5",
+		os.getenv("RESTORE_MODEL_PATH") or ".\\models\\default.h5"
+	)
+
+	summary = shap.kmeans(X_test, 1)
+	explainer = shap.KernelExplainer(classifier.predict, summary)
+
+	app.run(debug=0, host="0.0.0.0", port=os.getenv("PORT") or 5000)
