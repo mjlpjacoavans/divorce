@@ -1,6 +1,7 @@
-flask
-pandas
-keras
-sklearn
 tensorflow
 openpyxl
+sklearn
+pandas
+keras
+flask
+shap
