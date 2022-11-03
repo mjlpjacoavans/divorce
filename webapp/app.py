@@ -111,11 +111,11 @@ def question_get():
 	                             **{fun.__name__: fun for fun in [enumerate, len, time]})
 
 
-def render_shap_explainer(X_questions):
+def render_shap_explainer(X):
 	matplotlib.pyplot.ioff()
 	fig = matplotlib.pyplot.figure()
 
-	df_pred = pd.DataFrame(X_questions)
+	df_pred = pd.DataFrame(X)
 	shap_values = explainer.shap_values(df_pred)
 
 	cmap = matplotlib.colors.ListedColormap(np.array(["cornflowerblue" for _ in range(2)])[[0, 1]])
@@ -129,6 +129,11 @@ def render_shap_explainer(X_questions):
 	inmem_file = io.BytesIO()
 	fig.savefig(inmem_file, format="png")
 	return base64.b64encode(inmem_file.getbuffer()).decode("ascii")
+
+@app.get("/shap")
+def model_details():
+	b64_img = render_shap_explainer(X_test)
+	return f'<img class="modal-img" width="100%" height="auto" src="data:image/png;base64,{b64_img}">'
 
 
 @app.get("/result")
