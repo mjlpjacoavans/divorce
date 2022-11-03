@@ -872,7 +872,7 @@
 }
 .question-page-questions-container {
   flex: 0 0 auto;
-  width: 200px;
+  /*width: 200px;*/
   display: flex;
   align-self: center;
   align-items: center;
