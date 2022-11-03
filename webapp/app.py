@@ -124,7 +124,7 @@ def render_shap_explainer(X_questions):
 
 	# fig = matplotlib.pyplot.gcf()
 	ax = matplotlib.pyplot.gca()
-	ax.set_xlabel("")
+	ax.set_xlabel("Impact per answer")
 
 	inmem_file = io.BytesIO()
 	fig.savefig(inmem_file, format="png")
