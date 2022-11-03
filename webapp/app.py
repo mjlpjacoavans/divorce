@@ -189,7 +189,8 @@ def result_get():
 		chance = "medium"
 		percentage_color = "orange"
 		tips_title = "Here are some tips to improve your mariage."
-		tips_tagline = "" #TODO
+		tips_tagline = "Our model predicts that you have a medium chance of getting a divorce. " \
+		               "Don't let it get that far and try to improve your marriage with the following tips."
 		tips = [
 			[
 				"Respect each other's space",
@@ -269,11 +270,6 @@ def result_get():
 	                             b64_img=b64_img,
 	                             tips=tips,
 	                             **{fun.__name__: fun for fun in [round]})
-
-
-@app.get("/more_info")
-def more_info_get():
-	return "TODO: Show more info about how the app works", 501
 
 
 if __name__ == "__main__":
