@@ -133,7 +133,7 @@ def render_shap_explainer(X):
 @app.get("/shap")
 def model_details():
 	b64_img = render_shap_explainer(X_test)
-	return f'<img class="modal-img" width="100%" height="auto" src="data:image/png;base64,{b64_img}">'
+	return f'<title>🔎 Shap feature importance barplot</title><img class="modal-img" width="100%" height="auto" src="data:image/png;base64,{b64_img}">'
 
 
 @app.get("/result")
