@@ -11,6 +11,7 @@ import io
 import os
 
 # Data imports
+import numpy as np
 import pandas as pd
 import matplotlib
 import numpy
@@ -99,7 +100,8 @@ def train_nn(save_model_path="./models/default.h5", restore_model_path="./models
 @app.get("/onboarding")
 @app.get("/")
 def onboarding_get():
-	return flask.render_template("index.html")
+	return flask.render_template("index.html",
+				accuracy=accuracy,round=round)
 
 
 @app.get("/question")
@@ -109,17 +111,20 @@ def question_get():
 	                             **{fun.__name__: fun for fun in [enumerate, len, time]})
 
 
-def render_shap_explainer(y_proba, X_questions):
+def render_shap_explainer(X_questions):
 	matplotlib.pyplot.ioff()
 	fig = matplotlib.pyplot.figure()
-	fig.legend(["Divorce", "No divorce"])
 
 	df_pred = pd.DataFrame(X_questions)
 	shap_values = explainer.shap_values(df_pred)
 
-	shap.summary_plot(shap_values, df_pred, plot_type="bar", show=None,
-	                  feature_names=[f"Q{index}). {question[:35]}..."
-	                                 for index, question in enumerate(all_questions, start=1)])
+	cmap = matplotlib.colors.ListedColormap(np.array(["cornflowerblue" for _ in range(2)])[[0, 1]])
+	shap.summary_plot(shap_values, df_pred, plot_type="bar", show=None, color=cmap, class_names=["",""],
+		feature_names=[f"Q{index}). {question[:35]}..."for index, question in enumerate(all_questions, start=1)])
+
+	# fig = matplotlib.pyplot.gcf()
+	ax = matplotlib.pyplot.gca()
+	ax.set_xlabel("")
 
 	inmem_file = io.BytesIO()
 	fig.savefig(inmem_file, format="png")
@@ -140,7 +145,7 @@ def result_get():
 	divorce_prob = y_proba[0][0]
 	print(f"[*] Did a prediction for X of {X_questions=}: {y_proba=}|{divorce_prob=}")
 
-	b64_img = render_shap_explainer(y_proba, X_questions)
+	b64_img = render_shap_explainer(X_questions)
 	# b64_img = None
 
 	if divorce_prob < .33:
