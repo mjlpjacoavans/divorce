@@ -9,6 +9,7 @@ import time
 import re
 import io
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # Data imports
 import numpy as np
