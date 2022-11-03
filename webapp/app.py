@@ -151,8 +151,6 @@ def result_get():
 	if divorce_prob < .33:
 		chance = "low"
 		percentage_color = "green"
-		improvement_text = "You have a " + chance + " chance of getting a divorce. But this does not mean "
-
 		tips_title = "Here are some tips to make your marriage even better!"
 		tips_tagline = "Although your chances to get a divorce are quite low, there's awlays room " \
 		               "for improvement. Here are some tips to make your marriage even better. "
@@ -186,7 +184,7 @@ def result_get():
 		chance = "medium"
 		percentage_color = "orange"
 		tips_title = "Here are some tips to improve your mariage."
-		tips_tagline = ""
+		tips_tagline = "" #TODO
 		tips = [
 			[
 				"Respect each other's space",
@@ -262,6 +260,7 @@ def result_get():
 	                             divorce_prob=divorce_prob,
 	                             tips_tagline=tips_tagline,
 	                             tips_title=tips_title,
+	                             accuracy=accuracy,
 	                             b64_img=b64_img,
 	                             tips=tips,
 	                             **{fun.__name__: fun for fun in [round]})

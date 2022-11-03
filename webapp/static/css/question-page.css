@@ -719,6 +719,7 @@
   flex-direction: column;
 }
 .question-page-text {
+  z-index: 1;
   align-self: center;
   text-align: center;
 }
